@@ -1,0 +1,156 @@
+﻿@model List<Kitchen.Models.Order>
+@{
+    ViewData["Title"] = "Orders Management";
+}
+<link rel="stylesheet" href="~/css/AllOrders.css" asp-append-version="true" />
+<div class="orders-container">
+    <!-- Header Section -->
+    <div class="orders-header">
+        <h1 class="orders-title">
+            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            Orders Management
+        </h1>
+        <p class="orders-subtitle">Track and manage all customer orders in one place</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="orders-stats">
+        <div class="stat-card">
+            <div class="stat-number">@Model.Count()</div>
+            <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.Count(o => o.Status == "Completed")</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.Count(o => o.Status == "Pending")</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@(Model.Any() ? Model.Sum(o => o.TotalPrice).ToString("N0") : "0") EGP</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Controls Section -->
+    <div class="orders-controls">
+        <div class="search-container">
+            <svg class="search-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+            </svg>
+            <input type="text" class="search-input" placeholder="Search orders by customer name or order ID..." id="searchInput">
+        </div>
+    </div>
+
+    <!-- Orders Grid -->
+    <div class="orders-grid" id="ordersGrid">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var order in Model)
+            {
+                <div class="order-card" data-customer="@order.Customer.Name.ToLower()" data-order-id="@order.Id" data-status="@order.Status.ToLower()">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <div class="order-id">
+                                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Order #@order.Id
+                            </div>
+                        </div>
+                        <span class="order-status status-@order.Status.ToLower()">
+                            @order.Status
+                        </span>
+                    </div>
+
+                    <div class="order-meta">
+                        <div class="meta-item">
+                            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div>
+                                <div class="meta-label">Customer</div>
+                                <div class="meta-value">@order.Customer.Name</div>
+                            </div>
+                        </div>
+
+                        <div class="meta-item">
+                            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div>
+                                <div class="meta-label">Order Date</div>
+                                <div class="meta-value">@order.Date.ToString("MMM dd, yyyy")</div>
+                            </div>
+                        </div>
+
+                        <div class="meta-item">
+                            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div>
+                                <div class="meta-label">Total Amount</div>
+                                <div class="meta-value">@order.TotalPrice.ToString("N2") EGP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-actions">
+                        <a  href="/Order/OrderDetails/@order.Id" class="action-btn btn-details">
+                            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <svg class="empty-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6a2 2 0 114 0v1H8V6zm0 3a1 1 0 012 0 1 1 0 11-2 0zm4 0a1 1 0 112 0 1 1 0 11-2 0z" clip-rule="evenodd"></path>
+                </svg>
+                <h3 class="empty-title">No Orders Found</h3>
+                <p>There are no orders to display at the moment.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const orderCards = document.querySelectorAll('.order-card');
+
+        orderCards.forEach(card => {
+            const customerName = card.dataset.customer;
+            const orderId = card.dataset.orderId;
+
+            if (customerName.includes(searchTerm) || orderId.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Filter functionality (placeholder)
+    function toggleFilter() {
+        // Implement filter logic here
+        alert('Filter functionality can be implemented based on your requirements');
+    }
+
+    // Edit order functionality (placeholder)
+    function editOrder(orderId) {
+        // Implement edit order logic here
+        alert(`Edit order functionality for Order #${orderId}`);
+    }
+</script>

@@ -1,0 +1,80 @@
+﻿@model Staff 
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<div style="margin-top:30px">
+    <h1 class="text-center">Details</h1>
+
+
+    <div style="display: flex; align-items: center;height:300px; justify-content: flex-start; margin: 20px 0;  background-color: #f8f9fa; border-radius: 10px; padding: 0 20px; margin-top:50px; margin-bottom:20px;">
+       @* @if (Model?.Image?.Contains(".png", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            <img src="/Images/@Model.Image" alt="Instructor Image" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 3px solid #2f456c;">
+        }
+        else
+        {
+            <img src="/Images/7.png" alt="Instructor Image" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 3px solid #2f456c;">
+        }*@
+        <img src="/Images/c1.png" alt="Instructor Image" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 3px solid #2f456c;">
+        <div style="margin-left: 20px;">
+            <p style="font-size: 20px; font-weight: bold; margin: 8px 0;"><b>ID : </b> @Model.Id</p>
+            <p style="font-size: 20px; font-weight: bold; margin: 8px 0;"><b>Name : </b>@Model.Name</p>
+            <p style="font-size: 20px; font-weight: bold; margin: 8px 0;"><b>Position : </b>@Model.Position</p>
+            <p style="font-size: 20px; font-weight: bold; margin: 8px 0;"><b>Salary : </b>@Model.Salary</p>
+
+            <div style="display:flex">
+                <div>
+                    <a class="button-81" href="/Staff/All">Back To List</a>
+                </div>
+                @*
+                <div>
+                    <a class="button-81" href="/Instructor/Edit?Id=@Model.Id">Edit</a>
+                </div>
+                *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .card-hover:hover {
+        transform: scale(1.03);
+        transition: transform 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-81 {
+        background-color: #1e293b;
+        border: 0 solid #e2e8f0;
+        border-radius: 1.5rem;
+        box-sizing: border-box;
+        color: #ffff;
+        cursor: pointer;
+        width: 300px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Basier circle",-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1;
+        padding: 1rem 1.6rem;
+        text-align: center;
+        text-decoration: none #0d172a solid;
+        text-decoration-thickness: auto;
+        transition: all .1s cubic-bezier(.4, 0, .2, 1);
+        box-shadow: 0px 1px 2px rgba(166, 175, 195, 0.25);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        align-self: center;
+    }
+
+        .button-81:hover {
+            background-color: #1e293b;
+            color: white;
+        }
+</style>

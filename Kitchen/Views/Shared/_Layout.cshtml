@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body.fullscreen-page {
+        padding-top: 0 !important;
+        }
+
+        body:not(.fullscreen-page) {
+        padding-top: 76px;
+        }
+
+        .navbar {
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 0;
+        width: 100%;
+        box-sizing: border-box;
+        z-index: 1050;
+        }
+
+        .navbar-container {
+        max-width: 1200px;
+        padding-left: 7rem !important;
+        padding-right: 7rem !important;
+        box-sizing: border-box;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        }
+
+        .custom-container {
+        max-width: 1200px !important;
+        padding-left: 5rem !important;
+        padding-right: 5rem !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        }
+
+        .navbar-light .navbar-nav .nav-link.active {
+        color: #ec610c !important;
+        }
+
+        .navbar-light .navbar-nav .nav-link.text-light {
+        color: rgba(255, 255, 255, 0.7);
+        transition: color 0.3s ease;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        }
+
+        .navbar-light .navbar-nav .nav-link.text-light:hover {
+        color: #bb7143 !important;
+        }
+
+        .logo {
+        width: 50px;
+        height: auto;
+        margin-right: 10px;
+        vertical-align: middle;
+        }
+
+        .navbar-brand {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        }
+
+
+        .brand-text-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+
+        .delicious-text {
+        font-family: 'Brush Script MT', cursive;
+        color: #ec610c;
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 1.2;
+        }
+        .signup-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        border-radius: 10px;
+        padding: 20px;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        color: white;
+        }
+
+        .signup-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        text-align: center;
+        color: #ec610c;
+        }
+
+
+        .signup-btn {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        background-color: #ec610c;
+        color: white;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 3px;
+        }
+
+        .signup-btn:hover {
+        background-color: #d4560b;
+        }
+    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kitchen</title>
+    <link rel="shortcut icon" href="~/Images/Logo.png">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Kitchen.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body style="background-image: url('/Images/P5.png'); background-size: cover; background-position: center; background-attachment: fixed;">
+    <header style="position: fixed !important; top: 0; left: 0; right: 0; z-index: 1050; width: 100%;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container navbar-container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/Images/Logo.png" class="logo" alt="Ta3aa Kol Logo" />
+                    <div class="brand-text-container">
+                        <h2 style="color: white; margin: 0;">Ta3aa Kol</h2>
+                        <p class="delicious-text">Delicious</p>
+                    </div>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border-color: rgba(255, 255, 255, 0.5);">
+                    <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 30 30\'%3e%3cpath stroke=\'rgba%28255, 255, 255, 0.75%29\' stroke-linecap=\'round\' stroke-miterlimit=\'10\' stroke-width=\'2\' d=\'M4 7h22M4 15h22M4 23h22\'/%3e%3c/svg%3e');"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-light @((ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index") ? "active" : "")"
+                            asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light @((ViewContext.RouteData.Values["Controller"]?.ToString() == "Dish" && ViewContext.RouteData.Values["Action"]?.ToString() == "All") ? "active" : "")"
+                            asp-controller="Dish" asp-action="All">Menu</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (!User.IsInRole("5"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light @((ViewContext.RouteData.Values["Controller"]?.ToString() == "Order" && ViewContext.RouteData.Values["Action"]?.ToString() == "All") ? "active" : "")"
+                                    asp-controller="Order" asp-action="All">
+                                        Orders
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-light @((ViewContext.RouteData.Values["Controller"]?.ToString() == "Account" && ViewContext.RouteData.Values["Action"]?.ToString() == "Logout") ? "active" : "")"
+                                asp-controller="Account" asp-action="Logout">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                </a>
+                            </li>
+                            @if (User.IsInRole("5"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light @((ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" && ViewContext.RouteData.Values["Action"]?.ToString() == "Profile") ? "active" : "")"
+                                       asp-controller="Customer" asp-action="Profile">
+                                        <i class="fa-solid fa-user"></i>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+  
+     @if (!User.Identity.IsAuthenticated)
+     {
+         <div class="signup-container">
+             <div class="signup-title">SIGN IN / SIGN UP</div>
+             <button class="signup-btn" onclick="window.location.href='/Account/Login'">SIGN-IN</button>
+             <button class="signup-btn" onclick="window.location.href='/Account/Register'">SIGN-UP</button>
+         </div> 
+     }
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Kitchen - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

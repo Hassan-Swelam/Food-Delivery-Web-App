@@ -1,0 +1,194 @@
+﻿@*
+@model Kitchen.ViewModel.DishViewModel
+@{
+    ViewData["Title"] = "Edit";
+    SelectList CatList = new SelectList(@Model.Categories, "Id", "Name");
+}
+
+<link rel="stylesheet" href="~/css/NewDishes.css" asp-append-version="true" />
+
+
+<div class="dish-create-container">
+    <div class="page-header">
+        <h1>Create</h1>
+        <h4>New Dish</h4>
+    </div>
+    <div class="form-card">
+        <form asp-action="Edit" asp-controller="Dish" asp-route-Id="@Model.Id">
+            <div asp-validation-summary="All" class="text-danger validation-summary-errors"></div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Dish Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter dish name..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Price</label>
+                    <input asp-for="Price" class="form-control" placeholder="0.00" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="ImageFile" class="control-label">Dish Image</label>
+                    <div class="file-input-wrapper" onclick="document.getElementById('ImageFile').click()">
+                        <input asp-for="ImageFile" type="file" id="ImageFile" accept="image/*" />
+                        <div class="file-input-content">
+                            <div class="file-icon">📷</div>
+                            <div class="file-text">Click to upload image</div>
+                            <div class="file-subtext">PNG, JPG, GIF up to 10MB</div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <input asp-for="Description" class="form-control" placeholder="Describe your delicious dish..." />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Categories" class="control-label">Category</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@CatList">
+                        <option value="0">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="action-section">
+                <input type="submit" value="Save Edits" class="btn btn-primary" />
+            </div>
+            <div class="action-section">
+                <a href="/Dish/Details/@Model.Id" class="btn btn-primary">← Details</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // File input enhancement
+    document.getElementById('ImageFile').addEventListener('change', function (e) {
+        const wrapper = this.closest('.file-input-wrapper');
+        const fileName = e.target.files[0]?.name;
+        const content = wrapper.querySelector('.file-input-content');
+
+        if (fileName) {
+            content.innerHTML = `
+                        <div class="file-icon">✓</div>
+                        <div class="file-text">${fileName}</div>
+                        <div class="file-subtext">Click to change image</div>
+                    `;
+            wrapper.style.borderColor = 'rgba(72, 187, 120, 0.6)';
+            wrapper.style.background = 'linear-gradient(135deg, rgba(72, 187, 120, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%)';
+        }
+    });
+
+
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+--------------------------------------------------------------------------------------------
+*@
+
+
+
+
+
+
+@model Kitchen.ViewModel.DishViewModel
+@{
+    ViewData["Title"] = "Edit";
+    SelectList CatList = new SelectList(Model.Categories, "Id", "Name", Model.CategoryId);
+}
+
+<link rel="stylesheet" href="~/css/NewDishes.css" asp-append-version="true" />
+
+<div class="dish-create-container">
+    <div class="page-header">
+        <h1>Edit</h1>
+        <h4>Edit Dish</h4>
+    </div>
+    <div class="form-card">
+        <form asp-action="Edit" asp-controller="Dish" asp-route-Id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger validation-summary-errors"></div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Dish Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter dish name..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Price</label>
+                    <input asp-for="Price" class="form-control" placeholder="0.00" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="ImageFile" class="control-label">Dish Image</label>
+                    <div class="file-input-wrapper" onclick="document.getElementById('ImageFile').click()">
+                        <input asp-for="ImageFile" type="file" id="ImageFile" accept="image/*" />
+                        <div class="file-input-content">
+                            <div class="file-icon">📷</div>
+                            <div class="file-text">Click to upload image</div>
+                            <div class="file-subtext">PNG, JPG, GIF up to 10MB</div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <input asp-for="Description" class="form-control" placeholder="Describe your delicious dish..." />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="CategoryId" class="control-label">Category</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@CatList">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="action-section">
+                <input type="submit" value="Save Edits" class="btn btn-primary" />
+            </div>
+            <div class="action-section">
+                <a href="/Dish/Details/@Model.Id" class="btn btn-primary">← Details</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // File input enhancement
+    document.getElementById('ImageFile').addEventListener('change', function (e) {
+        const wrapper = this.closest('.file-input-wrapper');
+        const fileName = e.target.files[0]?.name;
+        const content = wrapper.querySelector('.file-input-content');
+
+        if (fileName) {
+            content.innerHTML = `
+                <div class="file-icon">✓</div>
+                <div class="file-text">${fileName}</div>
+                <div class="file-subtext">Click to change image</div>
+            `;
+            wrapper.style.borderColor = 'rgba(72, 187, 120, 0.6)';
+            wrapper.style.background = 'linear-gradient(135deg, rgba(72, 187, 120, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%)';
+        }
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

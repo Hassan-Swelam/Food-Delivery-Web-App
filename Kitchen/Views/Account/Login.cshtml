@@ -1,0 +1,165 @@
+﻿@model Kitchen.ViewModel.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Sign In</h1>
+            <div class="logo-container">
+                <img src="/Images/Logo.png" alt="Ta3aa Kol Logo" class="login-logo" />
+                <span class="brand-name">Ta3aa Kol</span>
+            </div>
+        </div>
+
+        <form asp-action="Login" class="login-form">
+            <div class="form-group">
+                <label asp-for="CustomerUserName" class="control-label">Username</label>
+                <input asp-for="CustomerUserName" class="form-control login-input" placeholder="Enter your username" />
+                <span asp-validation-for="CustomerUserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerPassword" class="control-label">Password</label>
+                <input asp-for="CustomerPassword" type="password" class="form-control login-input" placeholder="Enter your password" />
+                <span asp-validation-for="CustomerPassword" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group login-actions">
+                <input type="submit" value="Log In" class="btn login-btn" />
+                <a href="/Account/Register" class="register-link">Don't have an account? Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('/Images/P5.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .login-logo {
+            width: 40px;
+            height: auto;
+        }
+
+        .brand-name {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .login-form {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .login-input {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 5px;
+            padding: 12px 15px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .login-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(236, 97, 12, 0.5);
+        }
+
+        .login-btn {
+            background-color: #ec610c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #d4560b;
+        }
+
+        .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s;
+        }
+
+        .register-link:hover {
+            color: #ec610c;
+            text-decoration: none;
+        }
+
+        .text-danger {
+            color: #ff6b6b !important;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .login-actions {
+            margin-top: 30px;
+        }
+    </style>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,800 @@
+﻿@model Kitchen.ViewModel.OrderDishesViewModel
+@{
+    ViewData["Title"] = "Checkout - Complete Your Order";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    :root {
+        --primary-orange: #ff6b35;
+        --dark-orange: #e55a2b;
+        --light-orange: rgba(255, 107, 53, 0.1);
+        --black: #1a1a1a;
+        --dark-gray: #2d2d2d;
+        --medium-gray: #666666;
+        --light-gray: #f8f9fa;
+        --white: #ffffff;
+        --border-light: #e0e0e0;
+        --border-dashed: #d0d0d0;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+        --shadow-deep: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        color: var(--black);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    .checkout-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+
+    }
+
+    .checkout-header {
+        background: var(--white);
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .checkout-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+    }
+
+    .checkout-title {
+        color: var(--black);
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        letter-spacing: -0.02em;
+    }
+
+    .checkout-subtitle {
+        color: var(--medium-gray);
+        font-size: 1.2rem;
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .checkout-form {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 2.5rem;
+        align-items: start;
+        margin-bottom: 3rem;
+    }
+
+    .form-section {
+        background: var(--white);
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        height: fit-content;
+        border: 1px solid rgba(255, 107, 53, 0.1);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .section-title {
+        color: var(--black);
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
+    }
+
+    .section-icon {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+        color: var(--white);
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        display: block;
+        color: var(--black);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        letter-spacing: -0.01em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 1.1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--white);
+        color: var(--black);
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-orange);
+        box-shadow: 0 0 0 4px var(--light-orange);
+        transform: translateY(-2px);
+    }
+
+    .form-control::placeholder {
+        color: var(--medium-gray);
+        opacity: 0.7;
+    }
+
+    /* Enhanced Order Summary with Table */
+    .order-summary-container {
+        background: var(--white);
+        border-radius: 16px;
+        box-shadow: var(--shadow-deep);
+        overflow: hidden;
+        position: relative;
+        border: 1px solid var(--border-light);
+    }
+
+    .order-header {
+        background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+        color: var(--white);
+        padding: 2rem;
+        position: relative;
+    }
+
+    .order-header::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 15px solid var(--dark-gray);
+    }
+
+    .order-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        letter-spacing: -0.01em;
+    }
+
+    .order-number {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .order-content {
+        padding: 0;
+    }
+
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: inherit;
+    }
+
+    .order-table thead {
+        background: linear-gradient(135deg, var(--light-gray) 0%, #e9ecef 100%);
+    }
+
+    .order-table th {
+        padding: 1.5rem 1rem;
+        text-align: left;
+        font-weight: 700;
+        color: var(--black);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid var(--border-light);
+        position: relative;
+    }
+
+    .order-table th:first-child {
+        padding-left: 2rem;
+        border-top-left-radius: 0;
+    }
+
+    .order-table th:last-child {
+        text-align: right;
+        padding-right: 2rem;
+        border-top-right-radius: 0;
+    }
+
+    .order-table th:nth-child(3),
+    .order-table th:nth-child(4),
+    .order-table th:nth-child(5) {
+        text-align: center;
+    }
+
+    .order-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .order-table tbody tr:hover {
+        background: var(--light-orange);
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+    }
+
+    .order-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .order-table td {
+        padding: 1.5rem 1rem;
+        vertical-align: middle;
+        font-size: 1rem;
+    }
+
+    .order-table td:first-child {
+        padding-left: 2rem;
+        font-weight: 600;
+        color: var(--medium-gray);
+        font-size: 0.9rem;
+    }
+
+    .order-table td:nth-child(2) {
+        font-weight: 600;
+        color: var(--black);
+        font-size: 1.1rem;
+    }
+
+    .order-table td:nth-child(3) {
+        text-align: center;
+        font-weight: 700;
+        background: var(--light-gray);
+        color: var(--black);
+        border-radius: 20px;
+        margin: 0 0.5rem;
+        min-width: 60px;
+    }
+
+    .order-table td:nth-child(4) {
+        text-align: center;
+        color: var(--medium-gray);
+        font-weight: 500;
+    }
+
+    .order-table td:last-child {
+        text-align: right;
+        padding-right: 2rem;
+        font-weight: 700;
+        color: var(--primary-orange);
+        font-size: 1.2rem;
+    }
+
+    .order-summary {
+        padding: 2rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-top: 2px solid var(--border-light);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        padding: 0.5rem 0;
+    }
+
+    .summary-row:not(.total) {
+        color: var(--medium-gray);
+        border-bottom: 1px dashed var(--border-dashed);
+        padding-bottom: 1rem;
+    }
+
+    .summary-row.total {
+        background: linear-gradient(135deg, var(--primary-orange), var(--dark-orange));
+        color: var(--white);
+        padding: 1.5rem 2rem;
+        margin: 1.5rem -2rem -2rem -2rem;
+        font-size: 1.4rem;
+        font-weight: 800;
+        position: relative;
+        border-radius: 0 0 16px 16px;
+    }
+
+    .summary-row.total::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 10px solid var(--primary-orange);
+    }
+
+    .empty-order {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--medium-gray);
+    }
+
+    .empty-order i {
+        font-size: 5rem;
+        color: var(--primary-orange);
+        margin-bottom: 1.5rem;
+        opacity: 0.7;
+    }
+
+    .empty-order h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--black);
+    }
+
+    /* Full-width Action Section */
+    .checkout-actions {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+        padding: 4rem 2rem;
+        text-align: center;
+        border-top: 4px solid var(--primary-orange);
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+        margin-top: 3rem;
+    }
+
+    .actions-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .actions-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--black);
+        margin-bottom: 1rem;
+        letter-spacing: -0.01em;
+    }
+
+    .actions-subtitle {
+        color: var(--medium-gray);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom:20px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 3rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        font-family: inherit;
+        letter-spacing: -0.01em;
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+        color: var(--white);
+        box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+        color: var(--white);
+    }
+
+    .btn-secondary {
+        background: var(--white);
+        color: var(--black);
+        border: 2px solid var(--black);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary:hover {
+        background: var(--black);
+        color: var(--white);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .loading-spinner {
+        display: none;
+        width: 24px;
+        height: 24px;
+        border: 3px solid transparent;
+        border-top: 3px solid var(--white);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .hero-section {
+        width: 100vw;
+        height: 20vh;
+        position: relative;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+    }
+
+    .creative-slider-container {
+        position: relative;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .slider-wrapper {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .slider {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-content {
+        text-align: center;
+        padding: 2rem;
+        max-width: 800px;
+    }
+
+    .slide-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .slide-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 2rem;
+        text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    }
+
+
+</style>
+
+<section class="hero-section">
+    <div class="creative-slider-container">
+        <div class="slider-wrapper">
+            <div class="slider">
+                <div class="slide" style="background-color: transparent;">
+                    <div class="slide-content">
+                        <h2 class="slide-title">
+                            <i class="bi bi-receipt-cutoff"></i>
+                            <span>Checkout</span>
+                        </h2>
+                        <p class="slide-subtitle">Review your order and complete your purchase</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="actions-container">
+    <p class="actions-subtitle">
+        Review your information below and click the button below to finalize your delicious order.
+        Your food will be prepared fresh and delivered to your doorstep!
+    </p>
+</div>
+
+<div class="checkout-container">
+    <form id="orderForm" asp-action="OrderDetails" method="post">
+        @Html.AntiForgeryToken()
+        
+        <div class="checkout-form">
+            <!-- Customer Information -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <h2 class="section-title">Delivery Information</h2>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="customername" class="form-label">Full Name *</label>
+                    <input asp-for="customername" class="form-control" 
+                           placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="customeraddress" class="form-label">Delivery Address *</label>
+                    <input asp-for="customeraddress" class="form-control" 
+                           placeholder="Street address, city" required />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="customerphone" class="form-label">Phone Number *</label>
+                    <input asp-for="customerphone" class="form-control" 
+                           placeholder="+2 01023456789" required />
+                </div>
+            </div>
+
+            <!-- Enhanced Order Summary with Table -->
+            <div class="order-summary-container">
+                <div class="order-header">
+                    <h2 class="order-title">
+                        <i class="bi bi-receipt"></i>
+                        Order Invoice
+                    </h2>
+                    <div class="order-number">Order #<span id="orderNumber">ORD-2024-001</span></div>
+                </div>
+
+                <div class="order-content" id="orderContent">
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Item Name</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderDetailsTable">
+                            <!-- Sample data - will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="order-summary">
+                        <div class="summary-row total" id="totalPrice">
+                            <span>Total Amount:</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="empty-order" id="emptyOrder" style="display: none;">
+                    <i class="bi bi-basket"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some delicious items to get started!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden input for order JSON -->
+        <input type="hidden" id="orderDetailsInput" name="OrderDetailsJson" />
+    </form>
+</div>
+
+
+<div class="actions-container">
+    <div class="btn-group">
+        <button type="submit" form="orderForm" class="btn btn-primary" id="submitBtn">
+            <i class="bi bi-credit-card-fill"></i>
+            Complete Order
+            <div class="loading-spinner"></div>
+        </button>
+        <a href="/Dish/All" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Continue Shopping
+        </a>
+    </div>
+</div>
+
+
+<script>
+    // Enhanced form submission handling
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = submitBtn.querySelector('.loading-spinner');
+        
+        // Show loading state
+        spinner.style.display = 'block';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+        
+        // Generate order number
+        const orderNum = 'ORD-' + new Date().getFullYear() + '-' + 
+                        String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+        document.getElementById('orderNumber').textContent = orderNum;
+        
+        // Collect order data from table
+        const orderData = collectOrderData();
+        document.getElementById('orderDetailsInput').value = JSON.stringify(orderData);
+    });
+
+    // Function to collect order data from the table
+    function collectOrderData() {
+        const rows = document.querySelectorAll('#orderDetailsTable tr');
+        const orderData = [];
+        
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 5) {
+                orderData.push({
+                    DishId: cells[0].textContent.replace('#', ''),
+                    name: cells[1].textContent,
+                    quantity: parseInt(cells[2].textContent),
+                    price: parseFloat(cells[3].textContent.replace('$', '')),
+                    subtotal: parseFloat(cells[4].textContent.replace('$', ''))
+                });
+            }
+        });
+        
+        return orderData;
+    }
+
+    // Enhanced form validation with animations
+    const requiredInputs = document.querySelectorAll('input[required]');
+    requiredInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.style.borderColor = '#dc3545';
+                this.style.boxShadow = '0 0 0 4px rgba(220, 53, 69, 0.1)';
+            } else {
+                this.style.borderColor = 'var(--primary-orange)';
+                this.style.boxShadow = '0 0 0 4px var(--light-orange)';
+            }
+        });
+
+        input.addEventListener('input', function() {
+            if (this.style.borderColor === 'rgb(220, 53, 69)' && this.value.trim() !== '') {
+                this.style.borderColor = 'var(--border-light)';
+                this.style.boxShadow = 'none';
+            }
+        });
+    });
+
+    // Enhanced phone number formatting
+    const phoneInput = document.querySelector('input[asp-for="customerphone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 10) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            } else if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})/, '($1) $2-');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})/, '($1) ');
+            }
+            e.target.value = value;
+        });
+    }
+
+    // Function to populate table with dynamic data
+    function populateOrderTable(orderData) {
+        const tableBody = document.getElementById('orderDetailsTable');
+        const emptyOrder = document.getElementById('emptyOrder');
+        const orderContent = document.getElementById('orderContent');
+        
+        if (!orderData || orderData.length === 0) {
+            orderContent.style.display = 'none';
+            emptyOrder.style.display = 'block';
+            return;
+        }
+
+        emptyOrder.style.display = 'none';
+        orderContent.style.display = 'block';
+
+        let subtotal = 0;
+        let html = '';
+
+        orderData.forEach((item, index) => {
+            const itemSubtotal = item.price * item.quantity;
+            subtotal += itemSubtotal;
+            
+            html += `
+                <tr>
+                    <td>#${String(index + 1).padStart(3, '0')}</td>
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${itemSubtotal.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        tableBody.innerHTML = html;
+
+        // Calculate and update totals
+        const tax = subtotal * 0.1;
+        const deliveryFee = 3.99;
+        const total = subtotal + tax + deliveryFee;
+
+        document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+    }
+    
+    // Smooth scrolling for mobile
+    if (window.innerWidth <= 768) {
+        const form = document.getElementById('orderForm');
+        form.addEventListener('submit', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+</script>
+
+

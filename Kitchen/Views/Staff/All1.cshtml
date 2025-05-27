@@ -1,0 +1,210 @@
+﻿@using Kitchen.ViewModel
+@model IEnumerable<AllStaffViewModel>
+@{
+    ViewData["Title"] = "Our Team";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div class="staff-container">
+    <h1 class="staff-header">OUR TEAM</h1>
+
+    <div class="staff-slider-container">
+        <div class="staff-slider-track">
+            @foreach (var item in Model)
+            {
+                <div class="staff-card-wrapper">
+                    <div class="staff-card">
+                        <img src="~/Images/@item.Image" class="staff-card-img" alt="@item.Name" />
+                        <!-- Card Content -->
+                        <div class="staff-card-body">
+                            <h5 class="staff-name">@item.Name</h5>
+                            <p class="staff-position">@item.Position</p>
+                        </div>
+
+                        <!-- Card Overlay with Social Icons -->
+                        <div class="staff-card-overlay">
+                            <div class="staff-social-icons">
+                                <a href="https://www.facebook.com/" class="staff-social-icon" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.instagram.com/" class="staff-social-icon" target="_blank">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .staff-container {
+        margin: 50px auto;
+        max-width: 1200px;
+        padding: 0 20px;
+        position: relative;
+    }
+
+    .staff-header {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        color: #333;
+        position: relative;
+    }
+
+        .staff-header::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #624e3b;
+            margin: 15px auto;
+        }
+
+    /* Slider Container */
+    .staff-slider-container {
+        position: relative;
+        overflow: hidden;
+        padding: 20px 0;
+    }
+
+    /* Slider Track */
+    .staff-slider-track {
+        display: flex;
+        gap: 30px;
+        transition: transform 0.5s ease;
+        padding: 10px 0;
+    }
+
+    /* Card Wrapper */
+    .staff-card-wrapper {
+        flex: 0 0 300px;
+        padding: 10px;
+    }
+
+    /* Card Styles */
+    .staff-card {
+        position: relative;
+        height: 400px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .staff-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+    .staff-card-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .staff-card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .staff-name {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        color: #626060;
+    }
+
+    .staff-position {
+        color: #8f877d;
+        font-size: 1.0rem;
+        margin-bottom: 0;
+    }
+
+    /* Card Overlay */
+    .staff-card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 15px;
+    }
+
+    .staff-card:hover .staff-card-overlay {
+        opacity: 1;
+    }
+
+    /* Social Icons */
+    .staff-social-icons {
+        display: flex;
+        gap: 20px;
+    }
+
+    .staff-social-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        color: #333;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    .staff-social-icon:hover {
+        transform: scale(1.1);
+        background: white;
+    }
+
+    .staff-social-icon:hover i.fa-facebook-f{
+        color: #1877F2;
+    }
+
+    .staff-social-icon:hover i.fa-instagram {
+        color: #E1306C;
+    }
+
+    .staff-social-icon:hover i.fa-info {
+        color: #624e3b;
+    }
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        const track = $('.staff-slider-track');
+        const cards = $('.staff-card-wrapper');
+        const cardWidth = cards.outerWidth(true);
+        const visibleCards = 3; // Number of cards visible at once
+        let currentPosition = 0;
+        let maxPosition = -(cards.length - visibleCards) * cardWidth;
+
+        // Auto-slide every 3 seconds
+        setInterval(function() {
+            if (currentPosition > maxPosition) {
+                currentPosition -= cardWidth;
+                track.css('transform', `translateX(${currentPosition}px)`);
+            } else {
+                currentPosition = 0;
+                track.css('transform', 'translateX(0)');
+            }
+        }, 3000);
+    });
+</script>

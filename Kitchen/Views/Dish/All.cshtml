@@ -1,0 +1,234 @@
+﻿@using System.Text.Json
+@model Kitchen.ViewModel.DishListViewModel
+@{
+    ViewData["Title"] = "Dishes List";
+}
+<link rel="stylesheet" href="~/css/AllDish.css" asp-append-version="true" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<script src="~/js/site.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<section class="hero-section">
+    <div class="creative-slider-container">
+        <div class="slider-wrapper">
+            <div class="slider">
+                <div class="slide" style="background-image: url('/Images/me.png');">
+                    <div class="slide-content">
+                        <h2 class="slide-title">Our Menu</h2>
+                        <p class="slide-subtitle">Delicious Dishes Await</p>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (!User.IsInRole("5"))
+                            {
+                                <a href="/Dish/Add" class="hero-btn">Add New Dish</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<nav class="category-nav" id="categoryNav">
+    <div class="nav-container">
+        @foreach (var category in Model.Categories.OrderBy(c => c.Name))
+        {
+            <div class="category-item">
+                <a class="category-link" href="#category-@category.Name.Replace(" ", "-")">
+                    <div class="category-image-container">
+                        <img src="~/Images/@category.Image" class="category-image" alt="@category.Name" />
+                        <div class="category-name">@category.Name</div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</nav>
+<form id="orderForm" asp-action="CreateOrder" asp-controller="Order" method="post">
+    @foreach (var category in Model.Categories.OrderBy(c => c.Name))
+    {
+        var CategoryDishes = Model.Dishes.Where(d => d.Category_Id == category.Id).ToList();
+        if (CategoryDishes.Any())
+        {
+            <div id="category-@category.Name.Replace(" " , "-")" class="category-section mb-5">
+                <section class="cate-section">
+                    <div>
+                        <h3 style="font-family: 'Brush Script MT'; color:#d35400;">@category.Name.ToUpper()</h3>
+                    </div>
+                </section>
+                <section class="menu-categories-section">
+                    <div class="container">
+                        <div class="categories-grid">
+                            <div class="grid-left">
+                                @foreach (var dish in CategoryDishes.Take((int)Math.Ceiling(CategoryDishes.Count() / 2.0)))
+                                {
+                                    <div class="dish-item">
+                                        <div class="dish-image-wrapper">
+                                            <img src="/Images/@dish.Image" alt="@dish.Name" class="dish-image">
+                                        </div>
+                                        <div class="dish-info">
+                                            <div>
+                                                @if(User.IsInRole("1,2,3,4"))
+                                                {
+                                                    <a href="/Dish/Details/@dish.Id"><h3 class="dish-title">@dish.Name.ToUpper()</h3></a>
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="dish-title">@dish.Name.ToUpper()</h3>
+                                                }
+                                                <p class="dish-description">@dish.Description</p>
+                                                <div class="dish-price">@dish.Price.ToString("N2") EGP</div>
+                                            </div>
+                                            @if (!User.IsInRole("1,2,3,4"))
+                                            {
+                                                <div>
+                                                    <div class="quantity-controls">
+                                                        <button type="button" class="qty-btn decrease" onclick="decreaseQuantity(@dish.Id)">-</button>
+                                                        <span id="qty-@dish.Id" class="qty-display">0</span>
+                                                        <button type="button" class="qty-btn increase" onclick="increaseQuantity(@dish.Id)">+</button>
+                                                    </div>
+                                                    <button type="button" class="add-to-order-btn"
+                                                            onclick='addToOrder(@dish.Id, @Html.Raw(Json.Serialize(dish.Name ?? "")), @dish.Price.ToString(System.Globalization.CultureInfo.InvariantCulture))'>
+                                                        <i class="bi bi-plus-circle"></i>
+                                                        Add to Cart
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="grid-right">
+                                @foreach (var dish in CategoryDishes.Skip((int)Math.Ceiling(CategoryDishes.Count() / 2.0)).Take((CategoryDishes.Count()) / 2))
+                                {
+                                    <div class="dish-item">
+                                        <div class="dish-image-wrapper">
+                                            <img src="/Images/@dish.Image" alt="@dish.Name" class="dish-image">
+                                        </div>
+                                        <div class="dish-info">
+                                            <div>
+                                                @if (User.IsInRole("1,2,3,4"))
+                                                {
+                                                    <a href="/Dish/Details/@dish.Id"><h3 class="dish-title">@dish.Name.ToUpper()</h3></a>
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="dish-title">@dish.Name.ToUpper()</h3>
+                                                }
+                                                <p class="dish-description">@dish.Description</p>
+                                                <div class="dish-price">@dish.Price.ToString("N2") EGP</div>
+                                            </div>
+                                            @if (!User.IsInRole("1,2,3,4"))
+                                            {
+                                                <div>
+                                                    <div class="quantity-controls">
+                                                        <button type="button" class="qty-btn decrease" onclick="decreaseQuantity(@dish.Id)">-</button>
+                                                        <span id="qty-@dish.Id" class="qty-display">0</span>
+                                                        <button type="button" class="qty-btn increase" onclick="increaseQuantity(@dish.Id)">+</button>
+                                                    </div>
+                                                    <button type="button" class="add-to-order-btn"
+                                                            onclick='addToOrder(@dish.Id, @Html.Raw(Json.Serialize(dish.Name ?? "")), @dish.Price.ToString(System.Globalization.CultureInfo.InvariantCulture))'>
+                                                        <i class="bi bi-plus-circle"></i>
+                                                        Add to Cart
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+    }
+</form>
+<div id="bottomNavbar" class="fixed-bottom p-3 d-none animate__animated animate__slideInUp" style="background: rgba(248, 249, 250, 0.95); backdrop-filter: blur(10px); border-top: 2px solid #d35400; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-basket-fill fs-4 me-3" style="color: #d35400;"></i>
+                <div id="orderSummary" class="flex-grow-1 me-3 fw-bold" style="color: #333; font-size: 1.1rem;"></div>
+            </div>
+            <button type="button" class="btn btn-order-confirm" onclick="submitOrder()">
+                <i class="bi bi-check-circle me-2"></i> View Cart
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nav = document.getElementById('categoryNav');
+        const headerHeight = 80;
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > headerHeight) {
+                nav.classList.add('fixed');
+            } else {
+                nav.classList.remove('fixed');
+            }
+        });
+    });
+    document.querySelectorAll('.category-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    const orderQuantities = {};
+    const orderDetails = [];
+
+    function increaseQuantity(id) {
+        orderQuantities[id] = (orderQuantities[id] || 0) + 1;
+        document.getElementById(`qty-${id}`).textContent = orderQuantities[id];
+    }
+
+    function decreaseQuantity(id) {
+        if (orderQuantities[id] > 0) {
+            orderQuantities[id]--;
+            document.getElementById(`qty-${id}`).textContent = orderQuantities[id];
+        }
+    }
+
+    function addToOrder(id, name, price) {
+        const quantity = orderQuantities[id] || 0;
+
+        if (quantity > 0) {
+            const existingIndex = orderDetails.findIndex(item => item.id === id);
+            if (existingIndex !== -1) {
+                orderDetails[existingIndex].quantity = quantity;
+            } else {
+                orderDetails.push({ id, name, price: parseFloat(price), quantity });
+            }
+
+            updateOrderSummary();
+            document.getElementById("bottomNavbar").classList.remove("d-none");
+        } else {
+            alert("Please increase the quantity before adding to the order.");
+        }
+    }
+
+    function updateOrderSummary() {
+        const summary = orderDetails.map(item => `${item.name} x${item.quantity}`).join(", ");
+        document.getElementById("orderSummary").textContent = summary || "No items selected.";
+        document.getElementById("orderDetailsInput").value = JSON.stringify(orderDetails);
+    }
+
+    function submitOrder() {
+        if (orderDetails.length === 0) {
+            alert("No items in the order.");
+            return;
+        }
+        document.getElementById("orderDetailsInput").value = JSON.stringify(orderDetails);
+        document.getElementById("orderForm").submit();
+    }
+</script>

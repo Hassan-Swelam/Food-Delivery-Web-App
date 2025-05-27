@@ -1,0 +1,30 @@
+﻿@model List<Kitchen.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Random Feedbacks";
+}
+
+<h2>Random Feedbacks</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Comment</th>
+            <th>Rate</th>
+            <th>Customer</th>
+            <th>Order ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model)
+        {
+            <tr>
+                <td>@feedback.Comment</td>
+                <td>@feedback.Rate</td>
+                <td>@(feedback.Customer?.Name ?? "N/A")</td>
+                <td>@feedback.OrderId</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

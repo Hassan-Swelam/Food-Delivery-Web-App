@@ -1,0 +1,114 @@
+﻿@model Kitchen.ViewModel.DishViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<link rel="stylesheet" href="~/css/NewDishes.css" asp-append-version="true" />
+
+
+<div class="dish-create-container">
+    <div class="page-header">
+        <h1>Create</h1>
+        <h4>New Dish</h4>
+    </div>
+    <div class="form-card">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger validation-summary-errors"></div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Dish Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter dish name..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Price</label>
+                    <input asp-for="Price" class="form-control" placeholder="0.00" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="ImageFile" class="control-label">Dish Image</label>
+                    <div class="file-input-wrapper" onclick="document.getElementById('ImageFile').click()">
+                        <input asp-for="ImageFile" type="file" id="ImageFile" accept="image/*" />
+                        <div class="file-input-content">
+                            <div class="file-icon">📷</div>
+                            <div class="file-text">Click to upload image</div>
+                            <div class="file-subtext">PNG, JPG, GIF up to 10MB</div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <input asp-for="Description" class="form-control" placeholder="Describe your delicious dish..." />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="CategoryId" class="control-label">Category</label>
+                    <select name="CategoryId" id="CategoryId" class="form-control form-select">
+                        <option value="">-- Select Category --</option>
+                        @foreach (Category catitem in Model.Categories ?? new List<Category>())
+                        {
+                            if (Model?.CategoryId == catitem.Id)
+                            {
+                                <option value="@catitem.Id" selected>@catitem.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@catitem.Id">@catitem.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="action-section">
+                <input type="submit" value="Create Dish" class="btn btn-primary" />
+            </div>
+            <div class="action-section">
+                <a href="/Dish/All" class="btn btn-primary">← Back to Menu</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // File input enhancement
+    document.getElementById('ImageFile').addEventListener('change', function (e) {
+        const wrapper = this.closest('.file-input-wrapper');
+        const fileName = e.target.files[0]?.name;
+        const content = wrapper.querySelector('.file-input-content');
+
+        if (fileName) {
+            content.innerHTML = `
+                    <div class="file-icon">✓</div>
+                    <div class="file-text">${fileName}</div>
+                    <div class="file-subtext">Click to change image</div>
+                `;
+            wrapper.style.borderColor = 'rgba(72, 187, 120, 0.6)';
+            wrapper.style.background = 'linear-gradient(135deg, rgba(72, 187, 120, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%)';
+        }
+    });
+
+    // Form validation enhancement
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('invalid', function () {
+            this.classList.add('input-validation-error');
+        });
+
+        input.addEventListener('input', function () {
+            if (this.validity.valid) {
+                this.classList.remove('input-validation-error');
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

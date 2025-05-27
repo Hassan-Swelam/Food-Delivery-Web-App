@@ -1,0 +1,333 @@
+﻿:root {
+    --primary-orange: #d35400;
+    --secondary-orange: #bb7143;
+    --accent-orange: #e67e22;
+    --light-orange: rgba(211, 84, 0, 0.1);
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --bg-cream: #fef7f0;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.16);
+    --shadow-lg: 0 15px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== Base Styles ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-cream);
+    min-height: 100vh;
+    color: var(--text-dark);
+    position: relative;
+}
+
+/* ===== Dish Container ===== */
+.dish-container {
+    max-width: 1200px;
+    margin: 5rem auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* ===== Dish Card ===== */
+.dish-card {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* ===== Image Section ===== */
+.image-section {
+    position: relative;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f4f0 0%, #fff9f5 100%);
+}
+
+.dish-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s ease;
+    object-fit: cover;
+}
+
+.image-section:hover .dish-image {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-lg);
+}
+
+.price-tag {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.25rem;
+    box-shadow: 0 10px 20px rgba(211, 84, 0, 0.2);
+    z-index: 2;
+}
+
+/* ===== Content Section ===== */
+.content-section {
+    padding: 3rem 2rem 3rem 0;
+    position: relative;
+}
+
+.dish-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+    position: relative;
+    display: inline-block;
+}
+
+    .dish-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-orange), var(--accent-orange));
+        border-radius: 2px;
+    }
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(211, 84, 0, 0.1);
+    color: var(--primary-orange);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+}
+
+.dish-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 2.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--accent-orange);
+}
+
+/* ===== Action Buttons ===== */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 10; /* Ensure buttons stay above inactive modal */
+}
+
+.btn {
+    padding: 0.9rem 1.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    z-index: 1;
+}
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+.btn-edit {
+    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--primary-orange) 100%);
+    color: white;
+}
+
+.btn-back {
+    background: #f1f1f1;
+    color: var(--text-dark);
+}
+
+.btn-delete {
+    background: #f8f8f8;
+    color: #e74c3c;
+    border: 1px solid #ffcdd2;
+}
+
+    .btn-delete:hover {
+        background: #e74c3c;
+        color: white;
+    }
+
+/* ===== Decorative Elements ===== */
+.food-icon {
+    position: absolute;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.icon-1 {
+    top: -50px;
+    left: -50px;
+    font-size: 10rem;
+    color: var(--primary-orange);
+}
+
+.icon-2 {
+    bottom: -30px;
+    right: -30px;
+    font-size: 8rem;
+    color: var(--accent-orange);
+}
+
+/* ===== Modal Styles ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: none; /* Start hidden */
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Only show above everything when active */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+    .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-icon {
+    font-size: 4rem;
+    color: #e74c3c;
+    margin-bottom: 1.5rem;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.modal-text {
+    margin-bottom: 2rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.modal-btn-delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.modal-btn-cancel {
+    background: #f1f1f1;
+    color: var(--text-dark);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 992px) {
+    .dish-card {
+        grid-template-columns: 1fr;
+    }
+
+    .content-section {
+        padding: 2rem;
+    }
+
+    .dish-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dish-container {
+        padding: 1rem;
+        margin: 2rem auto;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

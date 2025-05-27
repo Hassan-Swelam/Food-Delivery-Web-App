@@ -1,0 +1,237 @@
+﻿@model Kitchen.ViewModel.RegistrationViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <div class="logo-container">
+                <img src="/Images/Logo.png" alt="Ta3aa Kol Logo" class="register-logo" />
+                <div class="brand-text">
+                    <h1>Ta3aa Kol</h1>
+                    <p class="delicious-text">Create Your Account</p>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="Register" class="register-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="AccountUserName" class="control-label">Username</label>
+                    <input asp-for="AccountUserName" class="form-control register-input" placeholder="Choose a username" />
+                    <span asp-validation-for="AccountUserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AccountEmail" class="control-label">Email</label>
+                    <input asp-for="AccountEmail" class="form-control register-input" placeholder="Your email address" />
+                    <span asp-validation-for="AccountEmail" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="AccountPassword" class="control-label">Password</label>
+                    <input asp-for="AccountPassword" type="password" class="form-control register-input" placeholder="Create password" />
+                    <span asp-validation-for="AccountPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Confirm_Password" class="control-label">Confirm Password</label>
+                    <input asp-for="Confirm_Password" type="password" class="form-control register-input" placeholder="Confirm your password" />
+                    <span asp-validation-for="Confirm_Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomerAddress" class="control-label">Address</label>
+                <input asp-for="CustomerAddress" class="form-control register-input" placeholder="Your delivery address" />
+                <span asp-validation-for="CustomerAddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomerPhoneNumber" class="control-label">Phone Number</label>
+                <input asp-for="CustomerPhoneNumber" class="form-control register-input" placeholder="Contact number" />
+                <span asp-validation-for="CustomerPhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group register-actions">
+                <button type="submit" class="btn register-btn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                <div class="login-link">
+                    Already have an account? <a href="/Account/Login">Sign In</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    .register-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url('/Images/P5.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 20px;
+    }
+
+    .register-card {
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 40px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .register-logo {
+        width: 50px;
+        height: auto;
+    }
+
+    .brand-text h1 {
+        color: white;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .delicious-text {
+        font-family: 'Brush Script MT', cursive;
+        color: #ec610c;
+        margin: 0;
+        font-size: 1.3rem;
+    }
+
+    .register-form {
+        color: white;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .control-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .register-input {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 5px;
+        padding: 12px 15px;
+        width: 100%;
+        transition: all 0.3s;
+    }
+
+        .register-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(236, 97, 12, 0.5);
+        }
+
+    .register-btn {
+        background-color: #ec610c;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .register-btn:hover {
+            background-color: #d4560b;
+            transform: translateY(-2px);
+        }
+
+    .btn-text {
+        font-size: 1rem;
+    }
+
+    .btn-icon {
+        font-size: 1.2rem;
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 15px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+        .login-link a {
+            color: #ec610c;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .login-link a:hover {
+                color: #ff8c42;
+                text-decoration: underline;
+            }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    @@media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .register-card {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,375 @@
+﻿@*
+@model Kitchen.ViewModel.ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />
+<div class="profile-container">
+    <!-- Header Section -->
+    <div class="profile-header">
+        <h1 class="profile-title">
+            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+            </svg>
+            Customer Profile
+        </h1>
+        <p class="profile-subtitle">Manage your account information and view order history</p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+        <!-- Customer Information Card -->
+        <div class="info-card">
+            <h2 class="card-title">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+                </svg>
+                Customer Information
+            </h2>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Name
+                </span>
+                <span class="info-value">@Model.customerName</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    Address
+                </span>
+                <span class="info-value">@Model.customerAddress</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                    </svg>
+                    Phone
+                </span>
+                <span class="info-value">@Model.customerPhone</span>
+            </div>
+
+            <a href="/Account/Edit" class="edit-btn">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                </svg>
+                Edit Information
+            </a>
+        </div>
+
+        <!-- Quick Stats Card -->
+        <div class="info-card">
+            <h2 class="card-title">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Account Summary
+            </h2>
+
+            <div class="info-item">
+                <span class="info-label">Total Orders</span>
+                <span class="info-value">@(Model.Orders?.Count() ?? 0)</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Total Spent</span>
+                <span class="info-value">@(Model.Orders?.Sum(o => o.TotalPrice).ToString("C", new System.Globalization.CultureInfo("ar-EG")) ?? "0.00 EGP")</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Member Since</span>
+                <span class="info-value">@(Model.Orders?.Min(o => o.Date).ToString("MMMM yyyy") ?? "N/A")</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order History Section -->
+    <div class="orders-section">
+        <h2 class="card-title">
+            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            Order History
+        </h2>
+
+        @if (Model.Orders != null && Model.Orders.Any())
+        {
+            foreach (var order in Model.Orders)
+            {
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-title">Order #@order.Id</div>
+                            <small style="color: #666;">@order.Date.ToShortDateString()</small>
+                        </div>
+                        <span class="order-status status-@order.Status.ToLower()">
+                            @order.Status
+                        </span>
+                    </div>
+
+                    <div class="order-total">
+                        Total: @order.TotalPrice.ToString("N2") EGP
+                    </div>
+
+                    @if (order.OrderDetails != null && order.OrderDetails.Any())
+                    {
+                        <table class="order-details-table">
+                            <thead>
+                                <tr>
+                                    <th>Dish</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in order.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>@(detail.Dish != null ? detail.Dish.Name : "N/A")</td>
+                                        <td>@(detail.Price.ToString("N2")) EGP</td>
+                                        <td><span class="quantity-badge">@detail.Quantity</span></td>
+                                        <td><strong>@((detail.Price * detail.Quantity).ToString("N2")) EGP</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p style="color: #666; font-style: italic; margin: 1rem 0;">No order details available.</p>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-orders">
+                <svg style="width: 4rem; height: 4rem; margin-bottom: 1rem; opacity: 0.5;" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6a2 2 0 114 0v1H8V6zm0 3a1 1 0 012 0 1 1 0 11-2 0zm4 0a1 1 0 112 0 1 1 0 11-2 0z" clip-rule="evenodd"></path>
+                </svg>
+                <h3>No Orders Yet</h3>
+                <p>You haven't placed any orders yet. Start exploring our menu!</p>
+            </div>
+        }
+    </div>
+
+    <!-- Back Button -->
+    <a href="/Home/Index" class="back-btn">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+        </svg>
+        Back to Home
+    </a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+---------------------------------------------------------------------------------------------------
+*@
+
+
+
+
+@model Kitchen.ViewModel.ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />
+<div class="profile-container">
+    <!-- Header Section -->
+    <div class="profile-header">
+        <h1 class="profile-title">
+            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+            </svg>
+            Customer Profile
+        </h1>
+        <p class="profile-subtitle">Manage your account information and view order history</p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+        <!-- Customer Information Card -->
+        <div class="info-card">
+            <h2 class="card-title">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+                </svg>
+                Customer Information
+            </h2>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Name
+                </span>
+                <span class="info-value">@(Model.customerName ?? "N/A")</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    Address
+                </span>
+                <span class="info-value">@(Model.customerAddress ?? "N/A")</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" style="width: 1rem; height: 1rem; margin-right: 0.5rem;">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                    </svg>
+                    Phone
+                </span>
+                <span class="info-value">@(Model.customerPhone ?? "N/A")</span>
+            </div>
+
+            <a href="/Account/Edit" class="edit-btn">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                </svg>
+                Edit Information
+            </a>
+        </div>
+
+        <!-- Quick Stats Card -->
+        <div class="info-card">
+            <h2 class="card-title">
+                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Account Summary
+            </h2>
+
+            <div class="info-item">
+                <span class="info-label">Total Orders</span>
+                <span class="info-value">@(Model.Orders?.Count() ?? 0)</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Total Spent</span>
+                <span class="info-value">@(Model.Orders?.Any() == true ? Model.Orders.Sum(o => o.TotalPrice).ToString("C", new System.Globalization.CultureInfo("ar-EG")) : "0.00 EGP")</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Member Since</span>
+                <span class="info-value">@(Model.Orders?.Any() == true ? Model.Orders.Min(o => o.Date).ToString("MMMM yyyy") : "N/A")</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order History Section -->
+    <div class="orders-section">
+        <h2 class="card-title">
+            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            Order History
+        </h2>
+
+        @if (Model.Orders != null && Model.Orders.Any())
+        {
+            foreach (var order in Model.Orders)
+            {
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-title">Order #@order.Id</div>
+                            <small style="color: #666;">@order.Date.ToShortDateString()</small>
+                        </div>
+                        <span class="order-status status-@order.Status.ToLower()">
+                            @order.Status
+                        </span>
+                    </div>
+
+                    <div class="order-total">
+                        Total: @order.TotalPrice.ToString("N2") EGP
+                    </div>
+
+                    @if (order.OrderDetails != null && order.OrderDetails.Any())
+                    {
+                        <table class="order-details-table">
+                            <thead>
+                                <tr>
+                                    <th>Dish</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in order.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>@(detail.Dish != null ? detail.Dish.Name : "N/A")</td>
+                                        <td>@(detail.Price.ToString("N2")) EGP</td>
+                                        <td><span class="quantity-badge">@detail.Quantity</span></td>
+                                        <td><strong>@((detail.Price * detail.Quantity).ToString("N2")) EGP</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p style="color: #666; font-style: italic; margin: 1rem 0;">No order details available.</p>
+                    }
+
+                    @if (order.Status?.ToLower() == "pending")
+                    {
+                        <form asp-action="UpdateOrderStatus" asp-controller="Order" method="post" style="margin-top: 1rem; display: inline-block;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <button type="submit" class="edit-btn">
+                                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L11.586 10l-2.293 2.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                Mark as Delivered & Leave Feedback
+                            </button>
+                        </form>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-orders">
+                <svg style="width: 4rem; height: 4rem; margin-bottom: 1rem; opacity: 0.5;" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6a2 2 0 114 0v1H8V6zm0 3a1 1 0 012 0 1 1 0 11-2 0zm4 0a1 1 0 112 0 1 1 0 11-2 0z" clip-rule="evenodd"></path>
+                </svg>
+                <h3>No Orders Yet</h3>
+                <p>You haven't placed any orders yet. Start exploring our menu!</p>
+            </div>
+        }
+    </div>
+
+    <!-- Back Button -->
+    <a href="/Home/Index" class="back-btn">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+        </svg>
+        Back to Home
+    </a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

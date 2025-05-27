@@ -1,0 +1,233 @@
+﻿@model MainViewModel
+@{
+    ViewData["Title"] = "Ta3aa Kol";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="~/css/Home.css" asp-append-version="true" />
+<section class="hero-section">
+    <div class="creative-slider-container">
+        <div class="slider-wrapper">
+            <div class="slider">
+                <div class="slide" style="background-image: url('/Images/P1.png')">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <h2 class="slide-title">Ta3aa Kol</h2>
+                        <p class="slide-subtitle">Delicious Experiences Await</p>
+                        <a href="#menu" class="hero-btn">Explore Menu</a>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('/Images/P2.png')">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <h2 class="slide-title">Premium Quality</h2>
+                        <p class="slide-subtitle">Finest Ingredients</p>
+                        <a href="#menu" class="hero-btn">Order Now</a>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('/Images/P3.png')">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <h2 class="slide-title">Professional Team</h2>
+                        <p class="slide-subtitle">Professional Service</p>
+                        <a href="#staff" class="hero-btn">Meet Our Team</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Categories Section -->
+<section id="menu" class="menu-categories-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle-small">Discover</span>
+            <h2 class="section-title">Our Menu</h2>
+        </div>
+
+        <div class="categories-grid">
+            <div class="grid-left">
+                @foreach (var category in Model.Categories.Take(3))
+                {
+                    <div class="category-item">
+                        <div class="category-image-wrapper">
+                            <img src="/Images/@category.Image" alt="@category.Name" class="category-image">
+                            <div class="category-overlay">
+                                <a href="/Dish/All#category-@category.Name" class="category-btn">@category.Name</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="grid-right">
+                @foreach (var category in Model.Categories.Skip(3).Take(3))
+                {
+                    <div class="category-item">
+                        <div class="category-image-wrapper">
+                            <img src="/Images/@category.Image" alt="@category.Name" class="category-image">
+                            <div class="category-overlay">
+                                <a href="/Dish/All#category-@category.Name" class="category-btn">@category.Name</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="section-cta">
+            <a href="/Dish/All" class="hero-btn">View Full Menu</a>
+        </div>
+    </div>
+</section>
+
+<!-- staff Section -->
+<section id="staff" class="menu-staffs-section">
+    <div class="staff-container">
+        <h1 class="staff-header">Our Team</h1>
+        <div class="staff-slider-container">
+            <div class="staff-slider-track">
+                @foreach (var item in Model.Staffs)
+                {
+                    <div class="staff-card-wrapper">
+                        <div class="staff-card">
+                            <img src="~/Images/@item.Image" class="staff-card-img" alt="@item.Name" />
+                            <!-- Card Content -->
+                            <div class="staff-card-body">
+                                <h5 class="staff-name">@item.Name</h5>
+                                <p class="staff-position">@item.Position</p>
+                            </div>
+
+                            <!-- Card Overlay with Social Icons -->
+                            <div class="staff-card-overlay">
+                                <div class="staff-social-icons">
+                                    <a href="https://www.facebook.com/" class="staff-social-icon" target="_blank">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="https://www.instagram.com/" class="staff-social-icon" target="_blank">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="customer-feedback-section">
+    <div class="feedback-container">
+        <div class="section-header">
+            <span class="section-subtitle-small">Testimonials</span>
+            <h2 class="section-title">What Our Customers Say</h2>
+        </div>
+
+        <div class="feedback-carousel">
+            @{
+                var random = new Random();
+                var randomFeedbacks = Model.Feedbacks.OrderBy(x => random.Next()).Take(6).ToList();
+            }
+            @foreach (var feedback in randomFeedbacks)
+            {
+                <div class="feedback-card">
+                    <div class="rating-stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <span class="star @(i <= feedback.Rate ? "filled" : "")">★</span>
+                        }
+                    </div>
+                    <p class="feedback-text">"@feedback.Comment"</p>
+                    <div class="customer-info">
+                        <div class="customer-avatar">
+                            <div class="avatar-placeholder">@feedback.Customer?.Name.Substring(0, 1)</div>
+                        </div>
+                        <div class="customer-details">
+                            <h4 class="customer-name">@(feedback.Customer?.Name ?? "Anonymous")</h4>
+                            <p class="order-reference">Order #@feedback.OrderId</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Initialize first slide
+        if (slides.length > 0) {
+            slides[0].classList.add('active');
+        }
+
+        function showSlide(index) {
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                currentSlide = index;
+            }
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            showSlide(nextIndex);
+        }
+
+        // Only start interval if there are slides
+        if (totalSlides > 1) {
+            let slideInterval = setInterval(nextSlide, 6000);
+
+            // Pause on hover
+            const slider = document.querySelector('.slider');
+            if (slider) {
+                slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                slider.addEventListener('mouseleave', () => {
+                    slideInterval = setInterval(nextSlide, 6000);
+                });
+            }
+        }
+    });
+    $(document).ready(function () {
+        const track = $('.staff-slider-track');
+        const cards = $('.staff-card-wrapper');
+        const cardWidth = cards.outerWidth(true);
+        const visibleCards = 3; // Number of cards visible at once
+        let currentPosition = 0;
+        let maxPosition = -(cards.length - visibleCards) * cardWidth;
+
+        // Auto-slide every 3 seconds
+        setInterval(function () {
+            if (currentPosition > maxPosition) {
+                currentPosition -= cardWidth;
+                track.css('transform', `translateX(${currentPosition}px)`);
+            } else {
+                currentPosition = 0;
+                track.css('transform', 'translateX(0)');
+            }
+        }, 3000);
+    });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Simple hover effect enhancement
+        const feedbackCards = document.querySelectorAll('.feedback-card');
+
+        feedbackCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.zIndex = 10;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.zIndex = '';
+            });
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
